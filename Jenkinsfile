@@ -6,6 +6,11 @@ pipeline {
     }
 
     stages {
+        stage ('Git Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Lavash2310/jenkins_apache2.git'
+            }
+        }
         stage ('Download Apache2') {
             steps {
                 sh '''
@@ -28,6 +33,18 @@ pipeline {
                     sudo grep "5[0-9][0-9] "/var/log/apache2/access.log || echo "No 5xx errors found."
                 '''
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline execution completed.'
+        }
+        success {
+            echo 'Pipeline executed successfully.'
+        }
+        failure {
+            echo 'Pipeline execution failed.'
         }
     }
 }
